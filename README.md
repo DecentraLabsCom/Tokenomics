@@ -1,6 +1,6 @@
 # DecentraLabs Tokenomics
 
-**DecentraLabs** is a decentralized marketplace for accessing online/remote laboratories shared by educational and research institutions. This document outlines the tokenomics of the project and how the native token ($LAB) fuels the ecosystem.
+**DecentraLabs** is a decentralized marketplace for accessing online/remote laboratories shared by educational and research institutions. This document outlines the tokenomics of the project and how the native token ($LAB) will fuel the ecosystem.
 
 ## 🧩 Token Utility
 
@@ -58,7 +58,7 @@ Marketplaces may apply additional and variable fees for lab access.
 ## 🛡️ Security and Verification
 
 - All economic flows are to be governed by smart contracts.
-- Identity verification is handled initially by the team (when lab providers register only using their wallets), but the goal is to delegate it to federated IdPs and, in the future, decentralized identity frameworks (Polygon ID, Truvera, etc.).
+- Identity verification is handled initially by the team/community (when lab providers register only using their wallets), but the goal is to delegate it to federated IdPs and, in the future, decentralized identity frameworks (Polygon ID, Truvera, etc.).
 - Lab access is managed through marketplaces like the upcoming DecentraLabs Marketplace.
 - Lab providers are required to stake $LAB tokens as a performance guarantee. If a reserved lab fails to deliver the expected service (e.g., it's offline or inaccessible), a portion of the staked amount is deducted from the provider's treasury. This mechanism ensures accountability, similar to slashing mechanisms in decentralized networks where nodes are penalized for dishonest or unreliable behavior.
 
