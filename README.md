@@ -14,7 +14,7 @@ The native token of DecentraLabs, **$LAB**, plays several key roles:
 
 ## 🏛️ Stakeholders and Economic Flows
 
-### Students
+### Students / Researchers
 - Access via wallet login or, in the near-term future, through their institutional account using SSO.
 - Reserve labs by paying in $LAB, either with personal funds or institutional balances.
 
