@@ -36,12 +36,14 @@ Each institution will be able to configure a treasury within the smart contract 
 > ⚠️ *Note: This is a preliminary policy and may evolve over the course of the project.*
 
 - 🔢 **Initial total supply**: 1 million $LAB.
+- ⛏️ **Minting policy**: Dynamic.
+  - Only the tokens that are actively needed to run the network are minted; the rest remain locked or un‑minted until the corresponding trigger occurs.
 - 📦 **Initial distribution**:
-  - 40% Lab usage incentives (usage mining)
-  - 20% Project treasury
-  - 20% Institutional funding pool
-  - 10% Founding team
-  - 10% Liquidity & exchange listings
+  - 45% Lab usage incentives (usage mining): minted‑on‑demand whenever a user books lab time or consumables.
+  - 15% Project treasury: pre‑minted into a timelock controlled by treasury multisig.
+  - 20% Institutional funding pool: granted per on‑boarded institution or periodically by DAO vote.
+  - 8% Founding team: pre‑minted, 36‑month linear vesting + 6‑month cliff.
+  - 12% Liquidity & exchange listings: seed liquidity pools at launch; LP tokens time‑locked.
 
 - 🔁 **Controlled inflation**:
   - Additional emissions for usage and governance participation will be subject to community decisions.
@@ -49,9 +51,10 @@ Each institution will be able to configure a treasury within the smart contract 
 ## 💼 Revenue Distribution
 
 Tokens paid for lab access are distributed as follows:
-- 85% to the lab provider
-- 12% to the project treasury
-- 3% to student subsidies or governance incentives
+- 83% to the lab provider.
+- 10% to the project treasury.
+- 4% to student subsidies.
+- 3% to governance incentives.
 
 Marketplaces may apply additional and variable fees for lab access.
 
