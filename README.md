@@ -51,10 +51,10 @@ Each institution will be able to configure a treasury within the smart contract 
 ## 💼 Revenue Distribution
 
 Tokens paid for lab access are distributed as follows:
-- 83% to the lab provider.
-- 10% to the project treasury.
-- 4% to student subsidies.
-- 3% to governance incentives.
+- 72% to the lab provider.
+- 15% to the project treasury.
+- 8% to student subsidies.
+- 5% to governance incentives.
 
 Marketplaces may apply additional and variable fees for lab access.
 
