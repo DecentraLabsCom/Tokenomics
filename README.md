@@ -1,4 +1,4 @@
-
+# DecentraLabs Tokenomics
 
 **DecentraLabs** is a decentralized marketplace for accessing online/remote laboratories shared by educational and research institutions. This document outlines the tokenomics of the project and how the native token ($LAB) will fuel the ecosystem.
 
