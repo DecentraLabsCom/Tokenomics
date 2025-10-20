@@ -1,4 +1,4 @@
-# DecentraLabs Tokenomics
+
 
 **DecentraLabs** is a decentralized marketplace for accessing online/remote laboratories shared by educational and research institutions. This document outlines the tokenomics of the project and how the native token ($LAB) will fuel the ecosystem.
 
@@ -7,43 +7,91 @@
 The native token of DecentraLabs, **$LAB**, plays several key roles:
 
 - 💳 **Payment for reservations**: Users pay for lab access using the $LAB token.
-- 🎓 **Institutional grants**: Universities can preload wallets or treasuries to fund student access.
+- 🎓 **Institutional grants**: Universities can preload institutional treasuries to fund student access without requiring individual wallets.
+- 🔒 **Provider staking**: Lab providers must stake tokens as a quality guarantee (800 $LAB base + 200 per additional lab beyond 10).
 - 🧑‍🏫 **Provider incentives**: Lab providers receive $LAB tokens for each completed reservation.
-- 🚀 **Early adopters incentives**: Institutions that join early as lab providers receive additional $LAB tokens upon registration.
+- 🚀 **Early adopters incentives**: Institutions that join early as lab providers receive 1,000 $LAB tokens upon registration (800 auto-staked + 200 to institutional treasury).
 - 🗳️ **Governance** *(future)*: $LAB holders will be able to vote on protocol decisions (e.g., lab listings/delistings, fee models, technical upgrades, support for authorization/authentication mechanisms).
 
 ## 🏛️ Stakeholders and Economic Flows
 
 ### Students / Researchers
-- Access via wallet login or, in the near-term future, through their institutional account using SSO.
-- Reserve labs by paying in $LAB, either with personal funds or institutional balances.
+- Access via wallet login or institutional account using SSO/SAML2 (schacPersonalUniqueCode).
+- Reserve labs by paying in $LAB:
+  - **With personal wallet**: Direct payment from user's balance.
+  - **Institutional users (SSO)**: Payment from institutional treasury (managed by backend relayer).
+- No wallet required for SSO users - authentication handled by institutional identity provider.
 
 ### Staff / Institutions / Providers
-- Verified manually by the team or community when registering via wallet, automatically via an Identity Provider (IdP) -when using a federated SSO access-, or through Decentralized ID (DID) credentials issued by their institutions.
-- Can register and list labs and receive payments in $LAB for their use.
-- Funding student access via smart contract-based treasuries.
+- Verified manually by the team or community when registering via wallet, automatically via an Identity Provider (IdP) when using federated SSO access, or through Decentralized ID (DID) credentials issued by their institutions.
+- Can register and list labs to receive payments in $LAB for their use.
+- **Initial allocation**: 1,000 $LAB tokens upon registration:
+  - 800 $LAB automatically staked (required to list labs).
+  - 200 $LAB deposited to institutional treasury (for SSO users).
+- **Staking requirements**:
+  - Base stake: 800 $LAB (covers first 10 labs).
+  - Additional stake: +200 $LAB per lab beyond the 10th.
+  - **Lock periods**:
+    - 180 days from initial auto-stake.
+    - 30 days from last reservation completion/cancellation.
+- **Slashing**: Tokens can be burned for service failures or misconduct.
+- Funding student access via smart contract-based institutional treasuries.
 
 ## 🏦 Institutional Treasuries
 
-Each institution will be able to configure a treasury within the smart contract system:
+Institutional treasuries enable providers (universities, research centers) to fund lab access for their users without requiring each user to have a wallet or hold tokens directly.
 
-- Allocate funds to specific student wallets, institutional accounts or DIDs.
-- Define daily/monthly usage limits.
-- Payments are made directly from the treasury, provided sufficient balance.
+### Architecture
+
+Each provider has an institutional treasury managed through the `InstitutionalTreasuryFacet`:
+
+- **Auto-initialization**: When a provider registers, 200 $LAB tokens are automatically deposited to their institutional treasury (in addition to the 800 $LAB auto-staked).
+- **Default limit**: Each institutional user (identified by SAML2 `schacPersonalUniqueCode`) has a default spending limit of 10 $LAB tokens.
+- **Centralized spending**: Provider can set custom limits per user or deposit additional funds as needed.
+
+### Backend Authorization Pattern
+
+Since institutional users (students, researchers) authenticate via SSO/SAML2 and don't have wallets:
+
+1. **Provider authorizes backend**: Provider calls `authorizeBackend(backendAddress)` to authorize a backend relayer.
+2. **Backend spends on behalf of users**: The authorized backend can call `spendFromInstitutionalTreasury(provider, puc, amount)` to spend tokens for a specific user (identified by their `puc`).
+3. **Per-user limits enforced**: The contract tracks how much each user has spent and enforces the limit set by the provider.
+
+### Key Functions
+
+- `depositToInstitutionalTreasury(uint256 amount)`: Provider deposits additional funds to treasury.
+- `setInstitutionalUserLimit(uint256 limit)`: Provider sets spending limit per institutional user.
+- `authorizeBackend(address backend)`: Provider authorizes a backend to spend on behalf of users.
+- `revokeBackend()`: Provider revokes backend authorization.
+- `spendFromInstitutionalTreasury(address provider, string memory puc, uint256 amount)`: Authorized backend spends tokens for a user (requires backend authorization).
+
+### Security Model
+
+- **Provider control**: Only the provider can authorize/revoke backends and set limits.
+- **Backend authorization**: Only the authorized backend can execute spending operations.
+- **Per-user tracking**: Individual spending limits prevent abuse.
+- **Event logging**: All operations emit events for transparency and auditing.
 
 ## 💰 Token Supply and Issuance Policy
 
 > ⚠️ *Note: This is a preliminary policy and may evolve over the course of the project.*
 
-- 🔢 **Initial total supply**: 1 million $LAB.
+- 🔢 **Maximum supply**: 1 million $LAB tokens (capped by smart contract).
 - ⛏️ **Minting policy**: Dynamic.
   - Only the tokens that are actively needed to run the network are minted; the rest remain locked or un‑minted until the corresponding trigger occurs.
-- 📦 **Initial distribution**:
-  - 45% Lab usage incentives (usage mining): minted‑on‑demand whenever a user books lab time or consumables.
-  - 15% Project treasury: pre‑minted into a timelock controlled by treasury multisig.
-  - 20% Institutional funding pool: granted per on‑boarded institution or periodically by DAO vote.
-  - 8% Founding team: pre‑minted, 36‑month linear vesting + 6‑month cliff.
+- 📦 **Provider allocation**:
+  - Each provider receives 1,000 $LAB upon registration:
+    - **800 $LAB** automatically staked (required to list labs).
+    - **200 $LAB** deposited to institutional treasury.
+  - **Maximum providers**: With 1M token cap, up to 1000 incentivized providers can be supported. However, not all tokens will be allocated to this (see next).
+- 📊 **Initial distribution** *(preliminary)*:
+  - 20% Institutional funding pool: granted to on‑boarded institutions (1,000 $LAB per provider upon registration).
+  - 15% Student subsidies pool: treasury-managed funds to subsidize lab access for students with financial need.
+  - 15% Project treasury: pre‑minted into a timelock controlled by treasury multisig for operations and development.
   - 12% Liquidity & exchange listings: seed liquidity pools at launch; LP tokens time‑locked.
+  - 10% Ecosystem growth: partnerships, integrations, marketing, and community initiatives.
+  - 10% Founding team: pre‑minted, 36‑month linear vesting + 6‑month cliff.
+  - 18% Reserve: un-minted tokens for future needs, governance decisions, or additional provider onboarding.
 
 - 🔁 **Controlled inflation**:
   - Additional emissions for usage and governance participation will be subject to community decisions.
@@ -51,19 +99,52 @@ Each institution will be able to configure a treasury within the smart contract 
 ## 💼 Revenue Distribution
 
 Tokens paid for lab access are distributed as follows:
-- 70% to the lab provider.
-- 15% to the project treasury.
-- 10% to student subsidies.
-- 5% to governance incentives.
+- **70%** to the lab provider (incentivizes quality service and lab availability).
+- **15%** to the project treasury (operations, development, and can be allocated to liquidity if needed).
+- **10%** to student subsidies (funding lab access for students with financial need).
+- **5%** to governance incentives (rewards for community participation in governance decisions).
 
-Marketplaces may apply additional and variable fees for lab access.
+**Notes:**
+- Marketplaces may apply additional and variable fees for lab access.
+- Liquidity for exchanges is provided from the initial 12% allocation in the token supply distribution.
+- The project treasury and reserve allocations could be used to add liquidity if market conditions require it.
 
 ## 🛡️ Security and Verification
 
-- All economic flows are to be governed by smart contracts.
-- Identity verification is handled initially by the team/community (when lab providers register only using their wallets), but the goal is to delegate it to federated IdPs and, in the future, decentralized identity frameworks (Polygon ID, Truvera, etc.).
-- Lab access is managed through marketplaces like the upcoming DecentraLabs Marketplace.
-- Lab providers are required to stake $LAB tokens as a performance guarantee. If a reserved lab fails to deliver the expected service (e.g., it's offline or inaccessible), a portion of the staked amount is deducted from the provider's treasury. This mechanism ensures accountability, similar to slashing mechanisms in decentralized networks where nodes are penalized for dishonest or unreliable behavior.
+### Provider Staking Mechanism
+
+Lab providers must stake $LAB tokens as a performance guarantee:
+
+- **Base stake**: 800 $LAB (covers first 10 labs).
+- **Additional stake**: +200 $LAB per lab beyond the 10th.
+- **Formula**: `requiredStake = 800 + max(0, listedLabs - 10) × 200`
+
+**Lock periods**:
+- **Initial lock**: 180 days from the moment tokens are auto-staked on provider registration.
+- **Reservation lock**: Additional 30-day lock from the last reservation completion/cancellation.
+
+**Slashing**: If a reserved lab fails to deliver the expected service (e.g., offline or inaccessible), a portion of the staked amount is deducted from the provider's balance. This mechanism ensures accountability, similar to slashing in decentralized networks.
+
+### Institutional Treasury Security
+
+- **Backend authorization**: Only provider-authorized backends can spend from institutional treasuries.
+- **Per-user limits**: Default 10 $LAB per institutional user (configurable by provider).
+- **Spending tracking**: Smart contract tracks individual user spending to enforce limits.
+- **Provider control**: Only the provider can authorize/revoke backends and modify limits.
+
+### Identity Verification
+
+- **Provider verification**:
+  - Wallet-based registration: Initially verified by team/community.
+  - SSO registration: Automatically verified via federated IdPs (SAML2).
+  - Future: Decentralized identity frameworks (Polygon ID, Truvera, etc.).
+- **Institutional users**: Authenticated via SSO using `schacPersonalUniqueCode` (puc).
+
+### Smart Contract Governance
+
+- All economic flows are governed by smart contracts (Diamond Pattern / EIP-2535).
+- Lab access is managed through marketplaces like the DecentraLabs Marketplace.
+- Event logging ensures transparency and auditability for all operations.
 
 ## 🔮 Roadmap & Future Utility
 
