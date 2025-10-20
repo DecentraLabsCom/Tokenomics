@@ -53,7 +53,7 @@ Each provider has an institutional treasury managed through the `InstitutionalTr
 
 Since institutional users (students, researchers) authenticate via SSO/SAML2 and don't have wallets:
 
-1. **Provider authorizes backend**: Provider calls `authorizeBackend(backendAddress)` to authorize a backend relayer.
+1. **Auto-authorization and additional backend authorizations**: Provider's address is automatically authorized as backend upon registration and may call `authorizeBackend(backendAddress)` to authorize additional backend relayers.
 2. **Backend spends on behalf of users**: The authorized backend can call `spendFromInstitutionalTreasury(provider, puc, amount)` to spend tokens for a specific user (identified by their `puc`).
 3. **Per-user limits enforced**: The contract tracks how much each user has spent and enforces the limit set by the provider.
 
