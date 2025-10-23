@@ -19,7 +19,7 @@ The native token of DecentraLabs, **$LAB**, plays several key roles:
 - Access via wallet login or institutional account using SSO/SAML2 (schacPersonalUniqueCode).
 - Reserve labs by paying in $LAB:
   - **With personal wallet**: Direct payment from user's balance.
-  - **Institutional users (SSO)**: Payment from institutional treasury (managed by backend relayer).
+  - **Institutional users (SSO)**: Payment from institutional treasury (managed by an institutional wallet or a backend relayer).
 - No wallet required for SSO users - authentication handled by institutional identity provider.
 
 ### Staff / Institutions / Providers
