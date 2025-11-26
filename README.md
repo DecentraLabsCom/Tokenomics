@@ -47,7 +47,7 @@ Institutional treasuries enable providers (universities, research centers) to fu
 Each provider has an institutional treasury managed through the `InstitutionalTreasuryFacet`:
 
 - **Auto-initialization**: When a provider registers, 200 $LAB tokens are automatically deposited to their institutional treasury if the provider pool has capacity; if the pool is exhausted, the treasury is initialized with zero but limits/configuration are still set.
-- **Default limit**: Each institutional user (identified by SAML2 `schacPersonalUniqueCode`) has a default spending limit of 10 $LAB tokens.
+- **Default limit**: Each institutional user (identified by SAML2 `schacPersonalUniqueCode`) has a default spending limit per period: 10 $LAB tokens every 120 days, with both the spending limit and the period duration configurable by the institution.
 - **Centralized spending**: Provider can set custom limits per user or deposit additional funds as needed.
 
 ### Backend Authorization Pattern
@@ -150,4 +150,5 @@ Lab providers must stake $LAB tokens as a performance guarantee:
 ---
 
 Have feedback or suggestions? Open an issue or start a discussion. We're building this ecosystem together!
+
 
