@@ -75,13 +75,11 @@ Since institutional users (students, researchers) authenticate via SSO/SAML2 and
 
 ## 💰 Token Supply and Issuance Policy
 
-> 💰 *Preliminary and may evolve; reflects current contracts.*
-
-- 💰 **Maximum supply**: 1 million $LAB (cap enforced).
-- 💰 **Mint authority**: after pool initialization, `MINTER_ROLE` should move to governance (timelock/DAO) and be revoked from the Diamond. No deployer premint.
-- 💰 **Provider allocation (20% pool)**:
+- **Maximum supply**: 1 million $LAB (cap enforced).
+- **Mint authority**: after pool initialization, `MINTER_ROLE` should move to governance (timelock/DAO) and be revoked from the Diamond. No deployer premint.
+- **Provider allocation (20% pool)**:
   - 1,000 $LAB per provider (800 auto-staked + 200 to institutional treasury) while pool capacity remains; if the pool is exhausted, providers still onboard but receive zero tokens.
-- 💰 **Initial distribution**:
+- **Initial distribution**:
   - 20% Providers: un-minted pool used to grant 1,000 $LAB per provider as they onboard.
   - 15% Treasury: preminted to an on-chain timelock (multisig-controlled, delay configurable).
   - 12% Liquidity: preminted to the same timelock; LP provisioning/removal must go through governance.
@@ -89,7 +87,7 @@ Since institutional users (students, researchers) authenticate via SSO/SAML2 and
   - 15% Student subsidies: 3% premint; admin-only top-ups of 3% when balance < 1,000 $LAB, up to 15% total.
   - 10% Founding team: premint to a vesting wallet (6-month cliff, ~36-month linear).
   - 18% Reserve: un-minted; only mintable via governed `mintFromReserve`, still under the global cap.
-- 💰 **Controlled emissions**:
+- **Controlled emissions**:
   - Provider mint bounded by the provider pool; governed reserve mint; admin-only top-ups for subsidies and ecosystem.
 
 ## 💼 Revenue Distribution
@@ -152,3 +150,4 @@ Lab providers must stake $LAB tokens as a performance guarantee:
 ---
 
 Have feedback or suggestions? Open an issue or start a discussion. We're building this ecosystem together!
+
